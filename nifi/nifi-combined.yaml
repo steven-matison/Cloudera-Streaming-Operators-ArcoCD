@@ -1,0 +1,39 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mynifi-web
+  namespace: cfm-streaming
+spec:
+  type: LoadBalancer
+  selector:
+    # Matching your specific pod labels
+    app.kubernetes.io/instance: mynifi
+    app.kubernetes.io/name: server
+  ports:
+    - name: nifi-https
+      protocol: TCP
+      port: 443        # Port the Ingress talks to
+      targetPort: 8443 # Port NiFi listens on inside the pod
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mynifi-web
+  namespace: cfm-streaming
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: mynifi-web.mynifi.cfm-streaming.svc.cluster.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: mynifi-web
+            port:
+              name: nifi-https
