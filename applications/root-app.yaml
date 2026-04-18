@@ -8,13 +8,11 @@ metadata:
 spec:
   project: default
   source:
-    # Points to your specific Argo CD repo
     repoURL: 'https://github.com/steven-matison/Cloudera-Streaming-Operators-ArcoCD'
     targetRevision: HEAD
-    path: base # Adjust this if your 'base' folder is under a different path
+    path: . 
   destination:
     server: 'https://kubernetes.default.svc'
-    # Base often handles multiple namespaces, but we target 'default' or 'argocd' for the root
     namespace: argocd 
   syncPolicy:
     automated:
