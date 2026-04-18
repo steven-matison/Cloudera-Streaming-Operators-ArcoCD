@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudera-kafka
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/steven-matison/Cloudera-Streaming-Operators-ArcoCD.git
+    targetRevision: HEAD
+    path: kafka
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cld-streaming
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true   # helpful for complex CRs
