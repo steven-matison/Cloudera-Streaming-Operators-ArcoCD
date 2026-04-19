@@ -16,15 +16,9 @@ spec:
     pullSecret: cloudera-creds
   hostName: mynifi-web.mynifi.cfm-streaming.svc.cluster.local
   uiConnection:
-    type: Ingress
-    ingressConfig:
-      hostname: ""
-    annotations:
-      nginx.ingress.kubernetes.io/affinity: cookie
-      nginx.ingress.kubernetes.io/affinity-mode: persistent
-      nginx.ingress.kubernetes.io/backend-protocol: HTTPS
-      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    type: Service
+    serviceConfig:
+      type: LoadBalancer
   security:
     initialAdminIdentity: "admin"
     nodeCertGen:
@@ -42,6 +36,3 @@ spec:
     clusterProvider:
       id: kubernetes-provider
       class: org.apache.nifi.kubernetes.state.provider.KubernetesConfigMapStateProvider
-#  narProvider:
-#    volumes:
-#      - volumeClaimName: nifi-nar-pvc
